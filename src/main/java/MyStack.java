@@ -81,5 +81,9 @@ public class MyStack<E> implements IStack<E> {
             System.out.println(top);
             top--;
         }
+
+
+
+        int i=0;
     }
 }
