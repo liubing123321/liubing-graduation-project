@@ -1,0 +1,29 @@
+@startuml
+scale 500 width
+
+[*] -> monet_baseinfo
+ monet_baseinfo --> RouteService :@PostConstruct
+RouteService:分表对外提供的服务\ninit\nloadRouteInfo\ngetTableSuffix
+
+state RouteService {
+    state init {
+        init :系统启动时初始化
+
+
+ }
+ init-->loadRouteInfo:系统启动时加载路由表构造路由信息
+
+  state loadRouteInfo {
+         loadRouteInfo-->routeInfoLoader_loadRouteInfo:加载路由表信息routeInfoMapper.getAllRouteInfo()
+        routeInfoLoader_loadRouteInfo-->routeInfoLoader_loadOneBiz:加载一个业务线的路由配置
+       routeInfoLoader_loadOneBiz--> routeInfoLoader_checkAfterBuildRangeMap:校验构造结果
+       routeInfoLoader_loadOneBiz-->routeInfoLoader_loadOneBiz:for循环多次调用将所有业务线加载完成
+
+       routeInfoLoader_checkAfterBuildRangeMap-->[*]:返回加载结果
+   }
+  loadRouteInfo--> getTableSuffix:对外提供获取表后缀
+     }
+}
+
+
+@enduml

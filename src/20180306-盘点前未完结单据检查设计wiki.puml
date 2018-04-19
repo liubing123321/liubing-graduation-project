@@ -1,0 +1,14 @@
+@startuml
+scale 1500 width
+[*]-->PDA前端
+
+PDA前端->bachAffairMan:HTTP
+bachAffairMan:request.log日志查看请求\ncatalina.out日志查看运行日志
+
+bachAffairMan->bachScmShopMan:dubbo调用
+bachAffairMan:dubbo-access-consumer日志查看作为dubbo调用的消费者请求
+bachScmShopMan->OrderStore:dubbo调用
+bachScmShopMan:dubbo-access-provider日志查看作为dubbo调用的提供者的响应
+bachScmShopMan:dubbo-access-consumer日志查看作为dubbo调用的消费者请求
+
+@enduml

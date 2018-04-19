@@ -1,0 +1,112 @@
+@startuml
+scale 1500 width
+[*]-->http
+
+[*]-->dubbo
+http->web
+
+dubbo-->remote
+
+remote  --> 鲜度
+remote  --> 无人货架
+web  --> 门店
+
+
+
+门店 -->adjust:bach-affair-man
+adjust :AdjustWebController\nAdjustShopWebController\n两个新入口：queryOperationLog\n入参：orderId\n出参：List<opLogData>
+
+adjust-->AdjustOrderWebBiz:bach-affair-man
+AdjustOrderWebBiz:方法:queryOperationLog\n入参：orderId\n出参：List<opLogData>
+
+
+AdjustOrderWebBiz-->AdjustOrderWebBizImpl:bach-affair-man
+AdjustOrderWebBizImpl:方法:queryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<opLogData>
+
+AdjustOrderWebBizImpl-->AdjustOrderService:bach-affair-man
+AdjustOrderService:方法queryOperationLog \n入参：orderId\n出参：List<opLogData>
+
+AdjustOrderService-->AdjustOrderServiceImpl:bach-affair-man
+AdjustOrderServiceImpl:方法：queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<opLogData>
+
+AdjustOrderServiceImpl-->OrderStoreReadService:order-store-api
+OrderStoreReadService:queryOperationLog\n入参：orderId,appId,visible\n出参：List<opLogData>
+
+OrderStoreReadService-->OrderStoreServiceImpl:order-store
+OrderStoreServiceImpl:queryOperationLog\n入参：orderId,appId,visible\n出参：List<opLogData>
+
+
+
+门店 -->check
+check:CheckWebController\nCheckShopWebController
+
+check-->CheckOrderWebBiz:bach-affair-man
+CheckOrderWebBiz:方法:queryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<opLogData>
+CheckOrderWebBiz-->CheckOrderService:bach-affair-man
+CheckOrderService:方法:queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<opLogData>
+CheckOrderService-->OrderStoreReadService:order-store-api
+
+
+门店 -->discard
+discard:DiscardWebController\nDiscardShopWebController
+discard-->DiscardOrderWebBiz:bach-affair-man
+DiscardOrderWebBiz:方法:queryOperationLog\n入参：orderId\n出参：List<opLogData>
+DiscardOrderWebBiz-->DiscardOrderWebBizImpl:bach-affair-man
+DiscardOrderWebBizImpl:方法:queryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<opLogData>
+DiscardOrderWebBizImpl-->DiscardOrderService:bach-affair-man
+DiscardOrderService:方法:queryOperationLog\n入参：orderId\n出参：List<opLogData>
+DiscardOrderService-->DiscardOrderServiceImpl
+DiscardOrderServiceImpl:方法:queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<opLogData>
+DiscardOrderServiceImpl-->OrderStoreReadService:order-store-api
+
+门店 -->pricetag
+pricetag:PriceTagWebGroupController\nPriceTagWebShopController
+
+pricetag-->PriceTagBizImpl:bach-affair-man
+PriceTagBizImpl:方法:ueryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<opLogData>
+PriceTagBizImpl-->PriceTagOrderStorage
+PriceTagOrderStorage:queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<opLogData>
+PriceTagOrderStorage-->OrderStoreReadService:order-store-api
+
+门店 -->transfer
+transfer : TransferWebController\nTransferShopWebController
+
+transfer-->TransferOrderBizImpl:bach-affair-man
+TransferOrderBizImpl:方法:queryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<opLogData>
+TransferOrderBizImpl-->TransferOrderStorage
+TransferOrderStorage:方法:queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<opLogData>
+TransferOrderStorage-->OrderStoreReadService:order-store-api
+
+web  --> 集团
+集团 -->adjust
+集团 -->check
+集团 -->discard
+集团 -->pricetag
+集团 -->transfer
+集团-->quality.control
+quality.control:QualityWebController
+
+quality.control-->QualityControlWebBiz:bach-affair-man
+QualityControlWebBiz:方法：queryOperationLog\n入参：orderId\n出参：List<opLogData>
+QualityControlWebBiz-->QualityControlWebBizImpl:bach-affair-man
+QualityControlWebBizImpl:方法：:queryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<opLogData>
+QualityControlWebBizImpl-->QualityControlOrderService
+
+QualityControlOrderService:方法：queryOperationLog\n入参：orderId\n出参：List<opLogData>
+QualityControlOrderService-->QualityControlOrderServiceImpl
+QualityControlOrderServiceImpl:方法:queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<opLogData>
+QualityControlOrderServiceImpl-->OrderStoreReadService:order-store-api
+
+web  --> pda
+
+pda -->adjust
+pda -->check
+pda -->discard
+pda -->pricetag
+pda -->transfer
+pda-->quality.control
+pda -->零售自动转换
+
+
+
+@enduml

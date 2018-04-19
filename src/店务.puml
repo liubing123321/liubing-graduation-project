@@ -1,0 +1,21 @@
+@startuml
+scale 600 width
+
+[*] -> 前端
+前端 --> affair_man : Http
+affair_man:adjust check discard price.tag transfer
+affair_remote-->affair_man : affair_man_api提供dubble接口
+affair_man --> affair_core : W  affair_core_api提供dubble接口
+
+affair_man --> affair_baseinfo : R/w affair_baseinfo_api提供dubble接口
+
+affair_baseinfo : 明细：具体的sku信息list
+affair_core --> order_store : 存储
+order_store-->mysql:存储
+mysql : json形式存储
+mysql-->order_store    :    es解析
+affair_core : 单据:门店 +操作者+时间等
+affair_baseinfo --> Mysql : 存储
+
+
+@enduml

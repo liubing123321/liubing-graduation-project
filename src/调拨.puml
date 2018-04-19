@@ -1,0 +1,24 @@
+@startuml
+scale 900 width
+
+[*] -> 调拨
+调拨 --> transfer : Http
+transfer:店务调拨
+transfer-->TransferFileController :/bach/affair/web/transfer/file
+TransferFileController :调拨单文件上传和下载
+transfer-->TransferShopFileController :/bach/affair/web/shop/transfer/file
+TransferShopFileController :调拨单文件上传和下载
+transfer-->TransferShopWebController :/bach/affair/web/shop/transfer
+TransferShopWebController :调拨门店调用的 url
+transfer-->TransferWebController : /bach/affair/web/transfer
+TransferWebController : 目前门店和集团都会调用，后面会逐渐拆开
+
+TransferFileController-->transferFileBiz
+TransferShopFileController-->transferFileBiz
+transferFileBiz:接口
+transferFileBiz-->transferOrderBizImpl
+TransferShopWebController-->transferOrderBizImpl
+TransferWebController-->transferOrderBizImpl
+transferOrderBizImpl-->service
+
+@enduml

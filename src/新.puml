@@ -1,0 +1,100 @@
+@startuml
+scale 500 width
+[*]-->http
+
+[*]-->dubbo
+http->web
+'
+'dubbo-->remote
+'
+'remote  --> 鲜度
+'remote  --> 无人货架
+
+
+
+
+web -->log:bach-affair-man
+log :QueryOperationLogController\n两个新入口：queryOperationLog\n入参：orderId\n出参：List<StoreOpLogData>
+
+log-->StoreOpLogBiz:bach-affair-man
+StoreOpLogBiz:方法:queryOperationLog\n入参：orderId\n出参：List<StoreOpLogData>
+
+
+StoreOpLogBiz-->StoreOpLogBizImpl:bach-affair-man
+StoreOpLogBizImpl:方法:queryOperationLog 进行orderId 以及返回list是否为空的校验\n入参：orderId\n出参：List<StoreOpLogData>
+
+StoreOpLogBizImpl-->StoreOpLogService:bach-affair-man
+StoreOpLogService:方法queryOperationLog \n入参：orderId\n出参：List<StoreOpLogData>
+
+StoreOpLogService-->StoreOpLogServiceImpl:bach-affair-man
+StoreOpLogServiceImpl:方法：queryOperationLog 生成appid和visible,进行日志查询调用OrderStoreReadService\n入参：orderId\n出参：List<StoreOpLogData>
+
+StoreOpLogServiceImpl-->OrderStoreReadService:order-store-api
+OrderStoreReadService:queryOperationLog\n入参：orderId,appId,visible\n出参：List<opLogData>
+
+OrderStoreReadService-->OrderStoreServiceImpl:order-store
+OrderStoreServiceImpl:queryOperationLog\n入参：orderId,appId,visible\n出参：List<opLogData>
+
+
+
+'门店 -->check
+'check:CheckWebController\nCheckShopWebController
+
+'check-->StoreOpLogBiz
+
+
+
+
+
+
+'门店 -->discard
+'discard:DiscardWebController\nDiscardShopWebController
+'discard-->StoreOpLogBiz
+
+
+
+
+
+
+'门店 -->pricetag
+'pricetag:PriceTagWebGroupController\nPriceTagWebShopController
+
+'pricetag-->StoreOpLogBiz
+
+
+
+
+'门店 -->transfer
+'transfer : TransferWebController\nTransferShopWebController
+'transfer-->StoreOpLogBiz
+
+
+
+
+'web  --> 集团
+'集团 -->adjust
+'集团 -->check
+'集团 -->discard
+'集团 -->pricetag
+'集团 -->transfer
+'集团-->quality.control
+'quality.control:QualityWebController
+
+'quality.control-->StoreOpLogBiz
+
+
+
+
+'web  --> pda
+'
+'pda -->adjust
+'pda -->check
+'pda -->discard
+'pda -->pricetag
+'pda -->transfer
+'pda-->quality.control
+'pda -->零售自动转换
+
+
+
+@enduml
