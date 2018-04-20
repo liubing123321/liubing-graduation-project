@@ -1,0 +1,61 @@
+<html>
+<body>
+<pre>
+    #*
+    快注释
+    *#
+$!{value1} ## !如果不存在强制为空
+
+    colors:$!{colors}
+    #foreach($color in $colors)
+    This is Color $!{foreach.index}:$color, $!{foreach.count}
+    #end
+
+    #foreach($key in $map.keySet())
+
+    Number:$key , value:$map.get($key)
+
+    #end
+
+     #foreach($kv in $map.entrySet())
+
+    Number:$kv.key , value:$kv.value
+
+    #end
+
+    User:$!{user.name}
+    User:$!{user.description}##模板会自动查找description
+    User:$!{user.getDescription()}
+
+
+
+    #set($title="Hello World")
+    Title:$!{title}
+
+
+
+    Parse: #parse("header.html")
+
+
+    Include:#include("header.html") ##只是将文本包含进来并不解析
+
+    #macro (render_color,$index,$color)
+    Color Render Macro $index,$color
+    #end
+
+      #foreach($color in $colors)
+            #render_color($foreach.index,$color)
+      #end
+
+    #set($hello="hello")
+    #set($helloworld="$!{hello} world")
+
+    $hello
+    $helloworld
+
+    #set($helloworld2='$!{hello} world')   ##单引号在模板里是不会解析的
+    $helloworld2
+</pre>
+
+</body>
+</html>
